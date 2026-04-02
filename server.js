@@ -132,7 +132,11 @@ app.get('/api/report', (req, res) => {
 
 app.get('/api/qrcode/:table', async (req, res) => {
   const table = req.params.table;
-  const url = `${req.protocol}://${req.get('host')}/index.html?table=${table}`;
+ /* const url = `${req.protocol}://${req.get('host')}/index.html?table=${table}`;*/
+ // 👉 URL du FRONTEND (Netlify)
+  const url = `https://savourdafrique.netlify.app/index.html?table=${table}`;
+
+
   try {
     const buffer = await QRCode.toBuffer(url, { type: 'png', margin: 2, width: 280 });
     res.set('Content-Type', 'image/png');
