@@ -144,7 +144,7 @@ app.get('/api/qrcode/:table', async (req, res) => {
   const table = req.params.table;
  /* const url = `${req.protocol}://${req.get('host')}/index.html?table=${table}`;*/
  // 👉 URL du FRONTEND (Netlify)
-  const url = `https://savourelafrique.netlify.app/index.html?table=${table}`;
+  const url = `https://savourdafrique.netlify.app/index.html?table=${table}`;
 
 
   try {
