@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const { nanoid } = require('nanoid');
 const QRCode = require('qrcode');
+const multer = require('multer');
 
 const app = express();
 const server = http.createServer(app);
@@ -15,6 +16,9 @@ const io = new Server(server, { cors: { origin: '*' } });
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('.'));
+app.use('/uploads', express.static('uploads'));
+
+const upload = multer({ dest: 'uploads/' });
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
@@ -47,9 +51,11 @@ app.get('/api/menu', (req, res) => {
   res.json(db.menu || []);
 });
 
-app.post('/api/menu', (req, res) => {
+app.post('/api/menu', upload.single('image'), (req, res) => {
   const db = readDB();
   const item = { ...req.body, id: nanoid() };
+  if (req.file) item.image = `/uploads/${req.file.filename}`;
+  if (req.body.accompagnements) item.accompagnements = JSON.parse(req.body.accompagnements);
   db.menu = db.menu || [];
   db.menu.push(item);
   writeDB(db);
@@ -57,14 +63,18 @@ app.post('/api/menu', (req, res) => {
   res.status(201).json(item);
 });
 
-app.put('/api/menu/:id', (req, res) => {
+app.put('/api/menu/:id', upload.single('image'), (req, res) => {
   const db = readDB();
   const idx = (db.menu || []).findIndex(i => i.id === req.params.id);
   if (idx < 0) return res.status(404).json({ error: 'Not found' });
-  db.menu[idx] = { ...db.menu[idx], ...req.body, id: req.params.id };
+  const updated = { ...db.menu[idx], ...req.body };
+  if (req.file) updated.image = `/uploads/${req.file.filename}`;
+  if (req.body.accompagnements) updated.accompagnements = JSON.parse(req.body.accompagnements);
+  updated.id = req.params.id;
+  db.menu[idx] = updated;
   writeDB(db);
   io.emit('menu-updated', db.menu);
-  res.json(db.menu[idx]);
+  res.json(updated);
 });
 
 app.delete('/api/menu/:id', (req, res) => {
@@ -134,7 +144,7 @@ app.get('/api/qrcode/:table', async (req, res) => {
   const table = req.params.table;
  /* const url = `${req.protocol}://${req.get('host')}/index.html?table=${table}`;*/
  // 👉 URL du FRONTEND (Netlify)
-  const url = `https://savourdafrique.netlify.app/index.html?table=${table}`;
+  const url = `https://savourelafrique.netlify.app/index.html?table=${table}`;
 
 
   try {
