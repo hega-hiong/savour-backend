@@ -54,7 +54,7 @@ app.get('/api/menu', (req, res) => {
 app.post('/api/menu', upload.single('image'), (req, res) => {
   const db = readDB();
   const item = { ...req.body, id: nanoid() };
-  if (req.file) item.image = `/uploads/${req.file.filename}`;
+  if (req.file) item.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   if (req.body.accompagnements) item.accompagnements = JSON.parse(req.body.accompagnements);
   db.menu = db.menu || [];
   db.menu.push(item);
@@ -68,7 +68,7 @@ app.put('/api/menu/:id', upload.single('image'), (req, res) => {
   const idx = (db.menu || []).findIndex(i => i.id === req.params.id);
   if (idx < 0) return res.status(404).json({ error: 'Not found' });
   const updated = { ...db.menu[idx], ...req.body };
-  if (req.file) updated.image = `/uploads/${req.file.filename}`;
+  if (req.file) updated.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   if (req.body.accompagnements) updated.accompagnements = JSON.parse(req.body.accompagnements);
   updated.id = req.params.id;
   db.menu[idx] = updated;
