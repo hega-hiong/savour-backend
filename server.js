@@ -15,6 +15,7 @@ const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('.'));
 app.use('/uploads', express.static('uploads'));
 
@@ -52,14 +53,26 @@ app.get('/api/menu', (req, res) => {
 });
 
 app.post('/api/menu', upload.single('image'), (req, res) => {
-  console.log('Requête POST /api/menu reçue');
+  console.log('=== Requête POST /api/menu ===');
+  console.log('Headers:', req.headers);
+  console.log('Body keys:', Object.keys(req.body));
   console.log('Body:', req.body);
   console.log('File:', req.file);
   
   const db = readDB();
   const item = { ...req.body, id: nanoid() };
+  
+  // Conversion des types
+  if (item.prix) item.prix = parseFloat(item.prix);
   if (req.file) item.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-  if (req.body.accompagnements) item.accompagnements = JSON.parse(req.body.accompagnements);
+  if (req.body.accompagnements) {
+    try {
+      item.accompagnements = JSON.parse(req.body.accompagnements);
+    } catch (e) {
+      console.error('Erreur parsing accompagnements:', e);
+      item.accompagnements = [];
+    }
+  }
   
   console.log('Item créé:', item);
   
