@@ -52,10 +52,17 @@ app.get('/api/menu', (req, res) => {
 });
 
 app.post('/api/menu', upload.single('image'), (req, res) => {
+  console.log('Requête POST /api/menu reçue');
+  console.log('Body:', req.body);
+  console.log('File:', req.file);
+  
   const db = readDB();
   const item = { ...req.body, id: nanoid() };
   if (req.file) item.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   if (req.body.accompagnements) item.accompagnements = JSON.parse(req.body.accompagnements);
+  
+  console.log('Item créé:', item);
+  
   db.menu = db.menu || [];
   db.menu.push(item);
   writeDB(db);
