@@ -22,8 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-/*const DB_FILE = path.join(__dirname, 'db.json');*/
-const DB_FILE = path.join('/data', 'db.json');
+const DB_FILE = path.join(__dirname, 'db.json');
 
 function readDB() {
   try {

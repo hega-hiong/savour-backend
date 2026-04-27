@@ -37,9 +37,55 @@
       "image": "images/logo.png",
       "accompagnements": null,
       "id": "29h_pHw72dp0A1B4-LpUE"
+    },
+    {
+      "nom": "pok",
+      "prix": 15,
+      "categorie": "Plats",
+      "image": "images/yassa.png",
+      "accompagnements": [],
+      "id": "ppUCY6Jo_zup4gqcyNB3y"
+    },
+    {
+      "nom": "ailes",
+      "prix": 5,
+      "categorie": "Plats",
+      "image": "images/ailes.jpg",
+      "accompagnements": [],
+      "id": "yLLiNuXATd9UEXe6n3CTv"
     }
   ],
   "orders": [
+    {
+      "table": "Inconnue",
+      "items": [
+        "1x ailes"
+      ],
+      "subtotal": 5,
+      "status": "Nouveau",
+      "timestamp": 1777301209268,
+      "id": "6GlcSeaZDPCvr1Hgw4QwH"
+    },
+    {
+      "table": "Inconnue",
+      "items": [
+        "3x ailes"
+      ],
+      "subtotal": 15,
+      "status": "Nouveau",
+      "timestamp": 1777300702908,
+      "id": "5-VbLKglDiSkh0IHedwT3"
+    },
+    {
+      "table": "Inconnue",
+      "items": [
+        "2x poulet"
+      ],
+      "subtotal": 30,
+      "status": "Nouveau",
+      "timestamp": 1777300564172,
+      "id": "xdG6yFC3s57Qolni8lqgj"
+    },
     {
       "table": "8",
       "items": [
