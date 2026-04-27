@@ -15,6 +15,7 @@ const io = new Server(server, { cors: { origin: '*' } });
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('.'));
+app.use('/images', express.static(path.join(__dirname, '../savour-frontend/images')));
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
